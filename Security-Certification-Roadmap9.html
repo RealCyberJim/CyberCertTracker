@@ -12,7 +12,7 @@
           Naming Convention for data-cert-id:
             - GROUP: 3-letter roadmap section code which corresponds to the established 9 color-coded grid areas on the roadmap. 
             - certname: lowercase, normalized label (no spaces/symbols, + becomes 'plus')
-            - Example: OPS__ceh, MGT__caspplus, 
+            - Example: OPS__ceh, OPS__pentestplus, 
         
           This structure ensures uniqueness, enables filtering, and supports scaling
           to all 481 certs across roadmap sections. THIS MAY BE OVERKILL, I KNOW.
@@ -29,7 +29,7 @@
           See also: Candidate View toggle feature and localStorage-based persistence
         */
         
-  /* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
+/* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
 body.candidate-view .certlink.achieved {
   outline: 0.15vmax solid limegreen;
   box-shadow: 0 0 0.4vmax limegreen;
@@ -39,6 +39,18 @@ body.candidate-view .certlink.planned {
   outline: 0.15vmax dashed gold;
   box-shadow: 0 0 0.4vmax gold;
 }
+
+/* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
+.certlink.session-visible.achieved {
+  outline: 0.15vmax solid limegreen;
+  box-shadow: 0 0 0.4vmax limegreen;
+}
+
+.certlink.session-visible.planned {
+  outline: 0.15vmax dashed gold;
+  box-shadow: 0 0 0.4vmax gold;
+}
+/* === END: Temporary Session Visuals in Default View === */
 
 /* === BEGIN: Candidate View Visibility Rules (added by @RealCyberJim) === */
 .candidate-only {
@@ -3143,6 +3155,7 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
                 btnAchieved.onclick = () => {
                 clearStates();
                 link.classList.add('achieved');
+                link.classList.add('session-visible'); // ✅ temporary visual cue in default view
                 updateStorage('achievedCerts', certId, true);
                 menu.remove();
                 };
@@ -3153,6 +3166,7 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
                 btnPlanned.onclick = () => {
                 clearStates();
                 link.classList.add('planned');
+                link.classList.add('session-visible'); // ✅ temporary visual cue in default view
                 updateStorage('plannedCerts', certId, true);
                 menu.remove();
                 };
@@ -3162,9 +3176,11 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
                 btnClear.textContent = '❌ Clear Status';
                 btnClear.onclick = () => {
                 clearStates();
+                link.classList.remove('session-visible'); // ✅ also remove the session-only cue
                 menu.remove();
                 };
                 menu.appendChild(btnClear);
+
 
                 menu.style.left = event.pageX + 'px';
                 menu.style.top = event.pageY + 'px';
@@ -3212,8 +3228,21 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
             links.forEach(link => {
               const isAchieved = link.classList.contains('achieved');
               const isPlanned = link.classList.contains('planned');
-      
-              if (showingCandidateView) {
+
+                if (showingCandidateView) {
+                // 🔄 Remove temporary session outlines before entering Candidate View
+                document.querySelectorAll('.certlink.session-visible').forEach(link =>
+                link.classList.remove('session-visible')
+                );
+
+                // ✅ Hide without collapsing layout
+                link.style.visibility = (isAchieved || isPlanned) ? 'visible' : 'hidden';
+                } else {
+                // ✅ Show everything again
+                link.style.visibility = 'visible';
+                }
+
+                if (showingCandidateView) {
                 // ✅ Hide without collapsing layout
                 link.style.visibility = (isAchieved || isPlanned) ? 'visible' : 'hidden';
               } else {
