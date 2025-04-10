@@ -1,30 +1,30 @@
 <style>
 
 
-/*  === Cert Tracker Integration (added by @RealCyberJim) ===
+/*  === Cert Tracker Integration (added by @RealCyberJim) === 
 
         On Desktop/iOS/android:
-                - In default view, click a tile to go to that vendor's page.
-                - Enter candidate view mode by clicking the "Candidate View" button.
-                - Click on the cert tile to toggle the popup menu.
-                - Click outside the popup to close it.
+        - In default view, click a tile to go to that vendor's page.
+        - Enter candidate view mode by clicking the "Candidate View" button.
+        - Click on the cert tile to toggle the popup menu.
+        - Click outside the popup to close it.
         On Desktop:
-                - ALSO: CTRL+Click on a cert tile to toggle the popup menu.
-                - Click outside the popup to close it.
+        - In default view, click a tile to go to that vendor's page.
+        - In default view: CTRL+Click on a cert tile to toggle the popup menu.
+        - Click outside the popup to close it.
 
-                The  cert tiles have been updated to support tracking user progress.
-          Each <a> tag now includes:
-            - class="certlink" → enables JavaScript tracking and popup behavior
-                by using CTRL+Click to present a popup menu with options to mark as achieved or planned.
-            - data-cert-id="GROUP__certname" → uniquely identifies the cert
+        The  cert tiles have been updated to support tracking user progress.
+        Each <a> tag now includes:
+        - class="certlink" → enables JavaScript tracking and to present a popup menu with options to mark as achieved or planned.
+        - data-cert-id="GROUP__certname" → uniquely identifies the cert
 
-          Naming Convention for data-cert-id:
+        Naming Convention for data-cert-id:
             - GROUP: 3-letter roadmap section code which corresponds to the established 9 color-coded grid areas on the roadmap. 
             - certname: lowercase, normalized label (no spaces/symbols, + becomes 'plus')
             - Example: OPS__ceh, OPS__pentestplus, 
         
-          This structure ensures uniqueness, enables filtering, and supports scaling
-          to all 481 certs across roadmap sections. THIS MAY BE OVERKILL, I KNOW.
+        This structure ensures uniqueness, enables filtering, and supports scaling
+        to all 481 certs across roadmap sections. THIS MAY BE OVERKILL, I KNOW.
           
                 NET - (Green) - Communication & Network Security
                 IAM - (Teal) - Identity & Access Management
@@ -35,9 +35,8 @@
                 DEV - (SkyBlue) - Software Development Security
                 OPS - (Blue/Red) - Security Operations
         
-          See also: Candidate View toggle feature and localStorage-based persistence
-
-        */
+          See also: Candidate View toggle feature and localStorage-based persistence */
+          
         
 /* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
 body.candidate-view .certlink.achieved {
@@ -49,7 +48,7 @@ body.candidate-view .certlink.planned {
   outline: 0.15vmax dashed gold;
   box-shadow: 0 0 0.4vmax gold;
 }
-
+/* === END: Cert Tracker Styles === */
 /* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
 .certlink.session-visible.achieved {
   outline: 0.15vmax solid limegreen;
@@ -61,7 +60,6 @@ body.candidate-view .certlink.planned {
   box-shadow: 0 0 0.4vmax gold;
 }
 /* === END: Temporary Session Visuals in Default View === */
-
 /* === BEGIN: Candidate View Visibility Rules (added by @RealCyberJim) === */
 .candidate-only {
   display: none;
@@ -72,7 +70,7 @@ body.candidate-view .candidate-only {
 }
 /* === END: Candidate View Visibility Rules === */
   
-  /* === BEGIN: Cert Popup Style (Production) === */
+  /* === BEGIN: Cert Popup Style (added by @RealCyberJim) === */
   .cert-popup-menu {
     position: absolute;
     background-color: white;
@@ -98,7 +96,7 @@ body.candidate-view .candidate-only {
     background-color: #f0f0f0;
   }
 
-/* === END: Cert Tracker Styles === */
+/* === END: Cert Popup Style === */
 
 
 
