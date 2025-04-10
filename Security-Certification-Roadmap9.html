@@ -2,13 +2,22 @@
 
 
 /*  === Cert Tracker Integration (added by @RealCyberJim) ===
-        
-          The  cert tiles have been updated to support tracking user progress.
+
+        On Desktop/iOS/android:
+                - In default view, click a tile to go to that vendor's page.
+                - Enter candidate view mode by clicking the "Candidate View" button.
+                - Click on the cert tile to toggle the popup menu.
+                - Click outside the popup to close it.
+        On Desktop:
+                - ALSO: CTRL+Click on a cert tile to toggle the popup menu.
+                - Click outside the popup to close it.
+
+                The  cert tiles have been updated to support tracking user progress.
           Each <a> tag now includes:
             - class="certlink" → enables JavaScript tracking and popup behavior
                 by using CTRL+Click to present a popup menu with options to mark as achieved or planned.
             - data-cert-id="GROUP__certname" → uniquely identifies the cert
-        
+
           Naming Convention for data-cert-id:
             - GROUP: 3-letter roadmap section code which corresponds to the established 9 color-coded grid areas on the roadmap. 
             - certname: lowercase, normalized label (no spaces/symbols, + becomes 'plus')
@@ -27,6 +36,7 @@
                 OPS - (Blue/Red) - Security Operations
         
           See also: Candidate View toggle feature and localStorage-based persistence
+
         */
         
 /* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
@@ -3094,12 +3104,18 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
           🎯 Candidate View
         </button>
       
-        <!-- Only visible when candidate-view class is active on <body> -->
+        <!-- Only visible inside Candidate View -->
+        <button id="toggleEditMode" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
+          ✏️ Edit My Certs
+        </button>
+      
+        <!-- Only visible inside Candidate View -->
         <button id="resetCertTracking" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax;">
           ❌ Reset Progress
         </button>
-</div>     
+      </div>
 <!-- === END: Candidate View & Reset Buttons === -->
+      
       
       
 
@@ -3125,10 +3141,14 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
                 if (plannedCerts.includes(certId)) link.classList.add('planned');
         
                 link.addEventListener('click', function (e) {
-                console.log("🔍 Clicked cert:", certId, "Ctrl key:", e.ctrlKey);
-                if (e.ctrlKey) {
-                e.preventDefault();
-                e.stopPropagation();  // <-- Add this line to stop the event from bubbling up
+                const isCandidateView = document.body.classList.contains('candidate-view');
+                const isCtrl = e.ctrlKey;
+
+                console.log("🔍 Clicked cert:", certId, "Ctrl key:", isCtrl, "Candidate View:", isCandidateView);
+
+                if (isCtrl || isCandidateView) {
+                e.preventDefault();      // stop link from opening
+                e.stopPropagation();     // stop bubbling
                 showCertPopup(e, link, certId);
                 }
                 });
@@ -3214,46 +3234,58 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
 </script>
 <!-- === END: Cert Popup Menu Script === -->
 
-<!-- === BEGIN: Candidate View Toggle Logic (added by @RealCyberJim) === -->
+<!-- === BEGIN: Candidate View & Edit Mode Toggle Logic (added by @RealCyberJim) === -->
 <script>
         document.addEventListener("DOMContentLoaded", () => {
-          const toggleButton = document.getElementById("toggleCandidateView");
+          const toggleCandidateViewButton = document.getElementById("toggleCandidateView");
+          const toggleEditModeButton = document.getElementById("toggleEditMode");
       
-          toggleButton.addEventListener("click", () => {
-            const showingCandidateView = document.body.classList.toggle("candidate-view");
+          // 🔄 Candidate View Toggle
+          toggleCandidateViewButton.addEventListener("click", () => {
+            const showing = document.body.classList.toggle("candidate-view");
+            document.body.classList.remove("edit-mode"); // Always reset edit mode when toggling off
       
-            toggleButton.textContent = showingCandidateView ? "🔄 Show All Certs" : "🎯 Candidate View";
+            toggleCandidateViewButton.textContent = showing ? "🏠 Exit Candidate View" : "🎯 Candidate View";
+            toggleEditModeButton.textContent = "✏️ Edit My Certs";
       
-            const links = document.querySelectorAll('.certlink');
-            links.forEach(link => {
-              const isAchieved = link.classList.contains('achieved');
-              const isPlanned = link.classList.contains('planned');
-
-                if (showingCandidateView) {
-                // 🔄 Remove temporary session outlines before entering Candidate View
-                document.querySelectorAll('.certlink.session-visible').forEach(link =>
-                link.classList.remove('session-visible')
-                );
-
-                // ✅ Hide without collapsing layout
-                link.style.visibility = (isAchieved || isPlanned) ? 'visible' : 'hidden';
-                } else {
-                // ✅ Show everything again
-                link.style.visibility = 'visible';
-                }
-
-                if (showingCandidateView) {
-                // ✅ Hide without collapsing layout
-                link.style.visibility = (isAchieved || isPlanned) ? 'visible' : 'hidden';
+            // Update cert visibility based on new mode
+            updateCertVisibility();
+          });
+      
+          // ✏️ Edit Mode Toggle (within Candidate View)
+          toggleEditModeButton.addEventListener("click", () => {
+            const editing = document.body.classList.toggle("edit-mode");
+            toggleEditModeButton.textContent = editing ? "✅ Done Editing" : "✏️ Edit My Certs";
+      
+            // Update cert visibility based on new mode
+            updateCertVisibility();
+          });
+      
+          // 🔁 Visibility Logic
+          function updateCertVisibility() {
+            const inCandidateView = document.body.classList.contains("candidate-view");
+            const inEditMode = document.body.classList.contains("edit-mode");
+      
+            document.querySelectorAll(".certlink").forEach(link => {
+              const isAchieved = link.classList.contains("achieved");
+              const isPlanned = link.classList.contains("planned");
+      
+              if (!inCandidateView) {
+                // Default view: show all
+                link.style.visibility = "visible";
+              } else if (inEditMode) {
+                // Edit mode: show all for editing
+                link.style.visibility = "visible";
               } else {
-                // ✅ Show everything again
-                link.style.visibility = 'visible';
+                // Candidate view (no edit): show only achieved/planned
+                link.style.visibility = (isAchieved || isPlanned) ? "visible" : "hidden";
               }
             });
-          });
+          }
         });
-      </script>
-<!-- === END: Candidate View Toggle Logic === -->
+</script>
+<!-- === END: Candidate View & Edit Mode Toggle Logic === -->
+      
 <!-- === BEGIN: Reset Tracking Script (added by @RealCyberJim) === -->
         <script>
           document.addEventListener("DOMContentLoaded", () => {
