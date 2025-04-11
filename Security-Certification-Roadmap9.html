@@ -49,6 +49,16 @@ body.candidate-view .certlink.planned {
   box-shadow: 0 0 0.4vmax gold;
 }
 /* === END: Cert Tracker Styles === */
+/* === BEGIN: Opaque Mode Styles (added by @RealCyberJim) === */
+body.candidate-view.opaque-mode .certlink {
+  opacity: 0.4;
+}
+
+body.candidate-view.opaque-mode .certlink.achieved,
+body.candidate-view.opaque-mode .certlink.planned {
+  opacity: 1;
+}
+/* === END: Opaque Mode Styles === */
 /* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
 .certlink.session-visible.achieved {
   outline: 0.15vmax solid limegreen;
@@ -68,6 +78,12 @@ body.candidate-view .certlink.planned {
 body.candidate-view .candidate-only {
   display: inline-block;
 }
+
+/* Only show Opaque Mode button if BOTH candidate-view AND edit-mode are active */
+body.candidate-view:not(.edit-mode) #toggleOpacityMode {
+  display: none;
+}
+
 /* === END: Candidate View Visibility Rules === */
 /* === BEGIN: Cert Popup Style (added by @RealCyberJim) === */
   .cert-popup-menu {
@@ -3107,7 +3123,10 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
         <button id="toggleEditMode" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
           ✏️ Edit My Certs
         </button>
-      
+        <!-- Only visible inside Candidate View -->
+<button id="toggleOpacityMode" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
+        🌫 Opaque Mode
+      </button>
         <!-- Only visible inside Candidate View -->
         <button id="resetCertTracking" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax;">
           ❌ Reset Progress
@@ -3238,6 +3257,8 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
         document.addEventListener("DOMContentLoaded", () => {
           const toggleCandidateViewButton = document.getElementById("toggleCandidateView");
           const toggleEditModeButton = document.getElementById("toggleEditMode");
+          const toggleOpacityModeButton = document.getElementById("toggleOpacityMode");
+
       
           // 🔄 Candidate View Toggle
           toggleCandidateViewButton.addEventListener("click", () => {
@@ -3247,18 +3268,42 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
             toggleCandidateViewButton.textContent = showing ? "🏠 Exit Candidate View" : "🎯 Candidate View";
             toggleEditModeButton.textContent = "✏️ Edit My Certs";
       
-            // Update cert visibility based on new mode
+          // Update cert visibility based on mode
             updateCertVisibility();
           });
       
           // ✏️ Edit Mode Toggle (within Candidate View)
           toggleEditModeButton.addEventListener("click", () => {
-            const editing = document.body.classList.toggle("edit-mode");
-            toggleEditModeButton.textContent = editing ? "✅ Done Editing" : "✏️ Edit My Certs";
-      
-            // Update cert visibility based on new mode
-            updateCertVisibility();
+          const editing = document.body.classList.toggle("edit-mode");
+          toggleEditModeButton.textContent = editing ? "✅ Done Editing" : "✏️ Edit My Certs";
+
+          if (editing) {
+          // Restore previous opaque mode state
+          const opaquePref = localStorage.getItem("opaqueMode") === "true";
+          if (opaquePref) {
+          document.body.classList.add("opaque-mode");
+          toggleOpacityModeButton.textContent = "💡 Full View";
+          } else {
+          document.body.classList.remove("opaque-mode");
+          toggleOpacityModeButton.textContent = "🌫 Opaque Mode";
+          }
+          } else {
+          document.body.classList.remove("opaque-mode");
+          localStorage.setItem("opaqueMode", "false"); // Clean up
+          }
+
+          updateCertVisibility();
           });
+
+// 🌫 Opaque Mode Toggle
+toggleOpacityModeButton.addEventListener("click", () => {
+  const opaque = document.body.classList.toggle("opaque-mode");
+  toggleOpacityModeButton.textContent = opaque ? "💡 Full View" : "🌫 Opaque Mode";
+
+  // Save preference
+  localStorage.setItem("opaqueMode", opaque ? "true" : "false");
+});
+
       
           // 🔁 Visibility Logic
           function updateCertVisibility() {
