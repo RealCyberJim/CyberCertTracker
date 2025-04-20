@@ -33,87 +33,126 @@
                 RSK - (Black) - Security & Risk Management
                 TST - (Purple) - Security Assessment & Testing
                 DEV - (SkyBlue) - Software Development Security
-                OPS - (Blue/Red) - Security Operations
+                OPS - (Blue/Red) - Security Operations             === */
+                
+        /* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
+        body.candidate-view .certlink.achieved {
+        outline: 0.15vmax solid limegreen;
+        box-shadow: 0 0 0.4vmax limegreen;
+        }
+
+        body.candidate-view .certlink.planned {
+        outline: 0.15vmax dashed gold;
+        box-shadow: 0 0 0.4vmax gold;
+        }
+        /* === END: Cert Tracker Styles === */
+        /* === BEGIN: Opaque Mode Styles (added by @RealCyberJim) === */
+        body.candidate-view.opaque-mode .certlink {
+        opacity: 0.4;
+        }
+
+        body.candidate-view.opaque-mode .certlink.achieved,
+        body.candidate-view.opaque-mode .certlink.planned {
+        opacity: 1;
+        }
+        /* === END: Opaque Mode Styles === */
+        /* === BEGIN: Opaque Mode Hover Enhancement (added by @RealCyberJim) === */
+
+        /* Smooth transition when opacity changes (hover in/out) */
+        body.candidate-view.opaque-mode .certlink {
+        transition: opacity 0.2s ease;
+        opacity: 0.4;
+        }
+
+        /* Fully reveal dimmed certs and their contents on hover */
+        body.candidate-view.opaque-mode .certlink:not(.achieved):not(.planned):hover,
+        body.candidate-view.opaque-mode .certlink:not(.achieved):not(.planned):hover * {
+        opacity: 1 !important;
+        cursor: pointer;
+        }
+        /* === END: Opaque Mode Hover Enhancement === */
+
+        /* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
+        .certlink.session-visible.achieved,
+        .certlink.session-visible.planned {
+        box-shadow: 0 0 0.4vmax currentColor;
+        }
+
+        .certlink.session-visible.achieved {
+        outline: 0.15vmax solid limegreen;
+        color: limegreen;
+        }
+
+        .certlink.session-visible.planned {
+        outline: 0.15vmax dashed gold;
+        color: gold;
+        }
+        /* === END: Temporary Session Visuals in Default View === */
+        /* === BEGIN: Candidate View Visibility Rules (added by @RealCyberJim) === */
+        /* All candidate-only buttons are hidden by default */
+        .candidate-only {
+        display: none;
+        }
+
+        /* Show them when Candidate View is active */
+        body.candidate-view .candidate-only {
+        display: inline-block;
+        }
+
+        /* Hide Opaque Mode button by default */
+        #toggleOpacityMode {
+        display: none;
+        }
+
+        /* Show it ONLY when both candidate-view AND edit-mode are active */
+        body.candidate-view.edit-mode #toggleOpacityMode {
+        display: inline-block;
+        }
+        /* === END: Candidate View Visibility Rules === */
+
+        /* === BEGIN: Cert Toolbar Button Style (added by @RealCyberJim) === */
+        .toolbar-button {
+        padding: 0.5vmax 1vmax;
+        font-size: 1vmax;
+        margin-right: 1vmax;
+        }
+
+        .toolbar-button:last-child {
+        margin-right: 0; /* Remove right margin from final button for balance */
+        }
+        /* === END: Cert Toolbar Button Style === */
+        /* === BEGIN: Cert Popup Style (added by @RealCyberJim) === */
+        .cert-popup-menu {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #888;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        z-index: 9999;
+        font-size: 16px;
+        border-radius: 5px;
+        }
+
+        .cert-popup-menu button {
+        display: block;
+        width: 100%;
+        margin: 0.2vmax 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        }
+
+        .cert-popup-menu button:hover {
+        background-color: #f0f0f0;
+        }
         
-          See also: Candidate View toggle feature and localStorage-based persistence */
-          
-        
-/* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
-body.candidate-view .certlink.achieved {
-  outline: 0.15vmax solid limegreen;
-  box-shadow: 0 0 0.4vmax limegreen;
-}
-
-body.candidate-view .certlink.planned {
-  outline: 0.15vmax dashed gold;
-  box-shadow: 0 0 0.4vmax gold;
-}
-/* === END: Cert Tracker Styles === */
-/* === BEGIN: Opaque Mode Styles (added by @RealCyberJim) === */
-body.candidate-view.opaque-mode .certlink {
-  opacity: 0.4;
-}
-
-body.candidate-view.opaque-mode .certlink.achieved,
-body.candidate-view.opaque-mode .certlink.planned {
-  opacity: 1;
-}
-/* === END: Opaque Mode Styles === */
-/* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
-.certlink.session-visible.achieved {
-  outline: 0.15vmax solid limegreen;
-  box-shadow: 0 0 0.4vmax limegreen;
-}
-
-.certlink.session-visible.planned {
-  outline: 0.15vmax dashed gold;
-  box-shadow: 0 0 0.4vmax gold;
-}
-/* === END: Temporary Session Visuals in Default View === */
-/* === BEGIN: Candidate View Visibility Rules (added by @RealCyberJim) === */
-.candidate-only {
-  display: none;
-}
-
-body.candidate-view .candidate-only {
-  display: inline-block;
-}
-
-/* Only show Opaque Mode button if BOTH candidate-view AND edit-mode are active */
-body.candidate-view:not(.edit-mode) #toggleOpacityMode {
-  display: none;
-}
-
-/* === END: Candidate View Visibility Rules === */
-/* === BEGIN: Cert Popup Style (added by @RealCyberJim) === */
-  .cert-popup-menu {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #888;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    z-index: 9999;
-    font-size: 16px;
-    border-radius: 5px;
-  }
-
-  .cert-popup-menu button {
-    display: block;
-    width: 100%;
-    margin: 0.2vmax 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-  }
-
-  .cert-popup-menu button:hover {
-    background-color: #f0f0f0;
-  }
-/* === END: Cert Popup Style === */
-
-
-
+        .cert-toolbar {
+        text-align: center;
+        margin-top: 4vmax;
+        }
+        /* === END: Cert Popup Style === */
+/*  === END Cert Tracker Integration === */
                     /* Set fill and line colors for certification boxes. dk suffix means "dark" for the line color. */
                     :root {
                             --green: #70AD47;
@@ -3110,261 +3149,303 @@ psd" href="https://www.scrum.org/professional-scrum-developer-certification" too
                             <!-- Find # of certs by searching for _bl@nk replacing the @ for a -->
                             <div class="key">481 certifications listed | July 2024</div>
                             <div class="key"> <br></div>
-
-
-<!-- === BEGIN: Candidate View & Reset Buttons (added by @RealCyberJim) === -->
-<div style="text-align: center; margin-top: 4vmax;">
-        <!-- Always visible -->
-        <button id="toggleCandidateView" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
-          🎯 Candidate View
-        </button>
-      
-        <!-- Only visible inside Candidate View -->
-        <button id="toggleEditMode" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
-          ✏️ Edit My Certs
-        </button>
-        <!-- Only visible inside Candidate View -->
-<button id="toggleOpacityMode" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax; margin-right: 1vmax;">
-        🌫 Opaque Mode
-      </button>
-        <!-- Only visible inside Candidate View -->
-        <button id="resetCertTracking" class="candidate-only" style="padding: 0.5vmax 1vmax; font-size: 1vmax;">
-          ❌ Reset Progress
-        </button>
-      </div>
-<!-- === END: Candidate View & Reset Buttons === -->
-      
-      
-      
-
+                        <!-- === BEGIN: Candidate View & Reset Buttons (added by @RealCyberJim) === -->
+                        <div class="cert-toolbar">
+                                <!-- Always visible -->
+                                <button id="toggleCandidateView" class="toolbar-button">
+                                🎯 Candidate View
+                                </button>
+                                <!-- Only visible inside Candidate View -->
+                                <button id="toggleEditMode" class="toolbar-button candidate-only">
+                                ✏️ Edit My Certs
+                                </button>
+                                <!-- Only visible inside Candidate View AND While Editing Certs -->
+                                <button id="toggleOpacityMode" class="toolbar-button candidate-only">
+                                🌫 Opaque Mode
+                                </button>
+                                <!-- Only visible inside Candidate View -->
+                                <button id="resetCertTracking" class="toolbar-button candidate-only">
+                                ♻️ Clear Achieved & Planned
+                                </button>
+                        </div>
+                        <!-- === END: Candidate View & Reset Buttons === -->
                     </div>
-
-
-<!-- === BEGIN: Cert Popup Menu Script (added by @RealCyberJim) === -->
-<script>
-        document.addEventListener("DOMContentLoaded", () => {
-                const DEBUG_MODE = false; // Set to false when you’re done debugging
-                console.log("✅ Cert tracker script loaded.");
-
-                const achievedCerts = JSON.parse(localStorage.getItem('achievedCerts') || '[]');
-                const plannedCerts = JSON.parse(localStorage.getItem('plannedCerts') || '[]');
-        
-                const links = document.querySelectorAll('.certlink');
-        
-                links.forEach(link => {
-                const certId = link.dataset.certId;
-        
-                // Restore stored status
-                if (achievedCerts.includes(certId)) link.classList.add('achieved');
-                if (plannedCerts.includes(certId)) link.classList.add('planned');
-        
-                link.addEventListener('click', function (e) {
-                const isCandidateView = document.body.classList.contains('candidate-view');
-                const isCtrl = e.ctrlKey;
-
-                console.log("🔍 Clicked cert:", certId, "Ctrl key:", isCtrl, "Candidate View:", isCandidateView);
-
-                if (isCtrl || isCandidateView) {
-                e.preventDefault();      // stop link from opening
-                e.stopPropagation();     // stop bubbling
-                showCertPopup(e, link, certId);
-                }
-                });
-                });
-
-                function showCertPopup(event, link, certId) {
-                console.log("📦 Creating popup for:", certId);
-
-                const oldMenu = document.querySelector('.cert-popup-menu');
-                if (oldMenu) oldMenu.remove();
-
-                const menu = document.createElement('div');
-                menu.className = 'cert-popup-menu';
-
-                // Utility to reset all states
-                function clearStates() {
-                link.classList.remove('achieved', 'planned');
-                updateStorage('achievedCerts', certId, false);
-                updateStorage('plannedCerts', certId, false);
-                }
-
-                const btnAchieved = document.createElement('button');
-                btnAchieved.textContent = '✔ Mark as Achieved';
-                btnAchieved.onclick = () => {
-                clearStates();
-                link.classList.add('achieved');
-                link.classList.add('session-visible'); // ✅ temporary visual cue in default view
-                updateStorage('achievedCerts', certId, true);
-                menu.remove();
-                };
-                menu.appendChild(btnAchieved);
-
-                const btnPlanned = document.createElement('button');
-                btnPlanned.textContent = '🌟 Mark as Planned';
-                btnPlanned.onclick = () => {
-                clearStates();
-                link.classList.add('planned');
-                link.classList.add('session-visible'); // ✅ temporary visual cue in default view
-                updateStorage('plannedCerts', certId, true);
-                menu.remove();
-                };
-                menu.appendChild(btnPlanned);
-
-                const btnClear = document.createElement('button');
-                btnClear.textContent = '❌ Clear Status';
-                btnClear.onclick = () => {
-                clearStates();
-                link.classList.remove('session-visible'); // ✅ also remove the session-only cue
-                menu.remove();
-                };
-                menu.appendChild(btnClear);
-
-
-                menu.style.left = event.pageX + 'px';
-                menu.style.top = event.pageY + 'px';
-                document.body.appendChild(menu);
-
-                console.log("✅ Popup element exists:", document.querySelector('.cert-popup-menu'));
-
-                // console.log("📍 Popup menu added at:", menu.style.left, menu.style.top);
-                // console.log("📦 Popup HTML:", menu.outerHTML);
-        }
-        
-                function updateStorage(listName, certId, add) {
-                const list = JSON.parse(localStorage.getItem(listName) || '[]');
-                const idx = list.indexOf(certId);
-                if (add && idx === -1) {
-                list.push(certId);
-                } else if (!add && !add && idx > -1) {
-                list.splice(idx, 1);
-                }
-                localStorage.setItem(listName, JSON.stringify(list));
-                }
-        
-                document.addEventListener('click', (e) => {
-                const menu = document.querySelector('.cert-popup-menu');
-                if (menu && !menu.contains(e.target)) {
-                menu.remove();
-                }
-                });
-        });
-
-</script>
-<!-- === END: Cert Popup Menu Script === -->
-
-<!-- === BEGIN: Candidate View & Edit Mode Toggle Logic (added by @RealCyberJim) === -->
-<script>
-        document.addEventListener("DOMContentLoaded", () => {
-          const toggleCandidateViewButton = document.getElementById("toggleCandidateView");
-          const toggleEditModeButton = document.getElementById("toggleEditMode");
-          const toggleOpacityModeButton = document.getElementById("toggleOpacityMode");
-
+                        <!-- === BEGIN: Cert Tracker Config (added by @RealCyberJim) === -->
+                        <script>
+                                const CERT_TRACKER_CONFIG = {
+                                        debug: false,
+                                        localStorageKeys: {
+                                                achieved: 'achievedCerts',
+                                                planned: 'plannedCerts',
+                                                opaqueMode: 'opaqueMode',
+                                },
+                                classNames: {
+                                        cert: 'certlink',
+                                        achieved: 'achieved',
+                                        planned: 'planned',
+                                        sessionVisible: 'session-visible',
+                                },
+                                buttonIds: {
+                                        candidateView: 'toggleCandidateView',
+                                        editMode: 'toggleEditMode',
+                                        opacityMode: 'toggleOpacityMode',
+                                        reset: 'resetCertTracking',
+                                },
+                                labels: {
+                                        candidateOn: '🏠 Exit Candidate View',
+                                        candidateOff: '🎯 Candidate View',
+                                        editOn: '✅ Done Editing',
+                                        editOff: '✏️ Edit My Certs',
+                                        opaqueOn: '💡 Full View',
+                                        opaqueOff: '🌫 Opaque Mode',
+                                }
+                            };
+                        </script>
+                        <!-- === END: Cert Tracker Config === -->
+                        <!-- === BEGIN: Cert Popup Menu Script (refactored by @RealCyberJim) === -->
+                        <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                        const config = CERT_TRACKER_CONFIG;
+                                        const debug = config.debug;
+                                
+                                        if (debug) console.log("✅ Cert tracker script loaded.");
+                                
+                                        const achievedCerts = JSON.parse(localStorage.getItem(config.localStorageKeys.achieved) || '[]');
+                                        const plannedCerts = JSON.parse(localStorage.getItem(config.localStorageKeys.planned) || '[]');
+                                
+                                        const links = document.querySelectorAll(`.${config.classNames.cert}`);
+                                
+                                        links.forEach(link => {
+                                                const certId = link.dataset.certId;
+                                        
+                                                // Restore visual state from saved data
+                                                if (achievedCerts.includes(certId)) link.classList.add(config.classNames.achieved);
+                                                if (plannedCerts.includes(certId)) link.classList.add(config.classNames.planned);
+                                        
+                                                link.addEventListener('click', function (e) {
+                                                        const isCandidateView = document.body.classList.contains("candidate-view");
+                                                        const isCtrl = e.ctrlKey;
+                                                
+                                                        if (debug) console.log("🔍 Clicked cert:", certId, "Ctrl key:", isCtrl, "Candidate View:", isCandidateView);
+                                                
+                                                        if (isCtrl || isCandidateView) {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                showCertPopup(e, link, certId);
+                                                }
+                                        });
+                                });
+                        
+                                function showCertPopup(event, link, certId) {
+                                        if (debug) console.log("📦 Creating popup for:", certId);
+                                
+                                        const oldMenu = document.querySelector('.cert-popup-menu');
+                                        if (oldMenu) oldMenu.remove();
+                                
+                                        const menu = document.createElement('div');
+                                        menu.className = 'cert-popup-menu';
+                                
+                                        // Clear existing states
+                                        function clearStates() {
+                                                link.classList.remove(
+                                                        config.classNames.achieved,
+                                                        config.classNames.planned,
+                                                        config.classNames.sessionVisible
+                                                );
+                                                updateStorage(config.localStorageKeys.achieved, certId, false);
+                                                updateStorage(config.localStorageKeys.planned, certId, false);
+                                }
+                        
+                                const btnAchieved = document.createElement('button');
+                                btnAchieved.textContent = '✔ Mark as Achieved';
+                                btnAchieved.onclick = () => {
+                                        clearStates();
+                                        link.classList.add(config.classNames.achieved, config.classNames.sessionVisible);
+                                        updateStorage(config.localStorageKeys.achieved, certId, true);
+                                        menu.remove();
+                                };
+                                menu.appendChild(btnAchieved);
+                        
+                                const btnPlanned = document.createElement('button');
+                                btnPlanned.textContent = '🌟 Mark as Planned';
+                                btnPlanned.onclick = () => {
+                                        clearStates();
+                                        link.classList.add(config.classNames.planned, config.classNames.sessionVisible);
+                                        updateStorage(config.localStorageKeys.planned, certId, true);
+                                        menu.remove();
+                                };
+                                menu.appendChild(btnPlanned);
+                        
+                                const btnClear = document.createElement('button');
+                                btnClear.textContent = '❌ Clear Status';
+                                btnClear.onclick = () => {
+                                        clearStates();
+                                        menu.remove();
+                                };
+                                menu.appendChild(btnClear);
+                        
+                                // Position popup safely
+                                const menuWidth = 180;
+                                const menuHeight = 100;
+                                const viewportWidth = window.innerWidth;
+                                const viewportHeight = window.innerHeight;
+                        
+                                let left = event.pageX;
+                                let top = event.pageY;
+                        
+                                if (left + menuWidth > viewportWidth) {
+                                left = viewportWidth - menuWidth - 20;
+                                }
+                                if (top + menuHeight > viewportHeight) {
+                                top = viewportHeight - menuHeight - 20;
+                                }
+                        
+                                menu.style.left = `${left}px`;
+                                menu.style.top = `${top}px`;
+                                document.body.appendChild(menu);
+                        
+                                if (debug) {
+                                        console.log("✅ Popup element exists:", document.querySelector('.cert-popup-menu'));
+                                }
+                                }
+                        
+                                function updateStorage(listName, certId, add) {
+                                        const list = JSON.parse(localStorage.getItem(listName) || '[]');
+                                        const idx = list.indexOf(certId);
+                                        if (add && idx === -1) {
+                                                list.push(certId);
+                                        } else if (!add && idx > -1) {
+                                                list.splice(idx, 1);
+                                        }
+                                        localStorage.setItem(listName, JSON.stringify(list));
+                                }
+                        
+                                // Remove popup if clicking outside
+                                document.addEventListener('click', (e) => {
+                                        const menu = document.querySelector('.cert-popup-menu');
+                                        if (menu && !menu.contains(e.target)) {
+                                                menu.remove();
+                                                }
+                                        });
+                                });
+                        </script>
+                        <!-- === END: Cert Popup Menu Script === -->
+                        <!-- === BEGIN: Candidate View & Edit Mode Toggle Logic (refactored by @RealCyberJim) === -->
+                        <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                const btnIds = CERT_TRACKER_CONFIG.buttonIds;
+                                const classNames = CERT_TRACKER_CONFIG.classNames;
+                                const labels = CERT_TRACKER_CONFIG.labels;
+                        
+                                const toggleCandidateViewButton = document.getElementById(btnIds.candidateView);
+                                const toggleEditModeButton = document.getElementById(btnIds.editMode);
+                                const toggleOpacityModeButton = document.getElementById(btnIds.opacityMode);
+                        
+                                // 🔄 Candidate View Toggle
+                                toggleCandidateViewButton.addEventListener("click", () => {
+                                const showing = document.body.classList.toggle("candidate-view");
+                                document.body.classList.remove("edit-mode"); // Always reset edit mode
+                        
+                                toggleCandidateViewButton.textContent = showing ? labels.candidateOn : labels.candidateOff;
+                                toggleEditModeButton.textContent = labels.editOff;
+                        
+                                updateCertVisibility();
+                                });
+                        
+                                // ✏️ Edit Mode Toggle
+                                toggleEditModeButton.addEventListener("click", () => {
+                                const editing = document.body.classList.toggle("edit-mode");
+                                toggleEditModeButton.textContent = editing ? labels.editOn : labels.editOff;
+                        
+                                if (editing) {
+                                // Restore previous opaque mode state
+                                const opaquePref = localStorage.getItem(CERT_TRACKER_CONFIG.localStorageKeys.opaqueMode) === "true";
+                                if (opaquePref) {
+                                        document.body.classList.add("opaque-mode");
+                                        toggleOpacityModeButton.textContent = labels.opaqueOn;
+                                } else {
+                                        document.body.classList.remove("opaque-mode");
+                                        toggleOpacityModeButton.textContent = labels.opaqueOff;
+                                }
+                                } else {
+                                document.body.classList.remove("opaque-mode");
+                                localStorage.setItem(CERT_TRACKER_CONFIG.localStorageKeys.opaqueMode, "false");
+                                }
+                        
+                                updateCertVisibility();
+                                });
+                        
+                                // 🌫 Opaque Mode Toggle
+                                toggleOpacityModeButton.addEventListener("click", () => {
+                                const opaque = document.body.classList.toggle("opaque-mode");
+                                toggleOpacityModeButton.textContent = opaque ? labels.opaqueOn : labels.opaqueOff;
+                                localStorage.setItem(CERT_TRACKER_CONFIG.localStorageKeys.opaqueMode, opaque ? "true" : "false");
+                                });
+                        
+                                // 🔁 Visibility Logic
+                                function updateCertVisibility() {
+                                const inCandidateView = document.body.classList.contains("candidate-view");
+                                const inEditMode = document.body.classList.contains("edit-mode");
+                        
+                                document.querySelectorAll(`.${classNames.cert}`).forEach(link => {
+                                const isAchieved = link.classList.contains(classNames.achieved);
+                                const isPlanned = link.classList.contains(classNames.planned);
+                        
+                                if (!inCandidateView) {
+                                        link.style.visibility = "visible";
+                                } else if (inEditMode) {
+                                        link.style.visibility = "visible";
+                                } else {
+                                        link.style.visibility = (isAchieved || isPlanned) ? "visible" : "hidden";
+                                }
+                                });
+                                }
+                                });
+                        </script>
+                        <!-- === END: Candidate View & Edit Mode Toggle Logic === -->
       
-          // 🔄 Candidate View Toggle
-          toggleCandidateViewButton.addEventListener("click", () => {
-            const showing = document.body.classList.toggle("candidate-view");
-            document.body.classList.remove("edit-mode"); // Always reset edit mode when toggling off
+                        <!-- === BEGIN: Clear My Tracking Script (refactored by @RealCyberJim) === -->
+                        <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                const resetButton = document.getElementById(CERT_TRACKER_CONFIG.buttonIds.reset);
+                        
+                                resetButton.addEventListener("click", () => {
+                                const confirmed = confirm("🧹 This will clear your Achieved and Planned certs. Are you sure?");
+                        
+                                if (confirmed) {
+                                // 1. Clear stored data
+                                localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.achieved);
+                                localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.planned);
+                                localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.opaqueMode);
+                        
+                                // 2. Remove tracking classes from all certs
+                                const links = document.querySelectorAll(`.${CERT_TRACKER_CONFIG.classNames.cert}`);
+                                links.forEach(link => {
+                                        link.classList.remove(
+                                        CERT_TRACKER_CONFIG.classNames.achieved,
+                                        CERT_TRACKER_CONFIG.classNames.planned,
+                                        CERT_TRACKER_CONFIG.classNames.sessionVisible
+                                        );
+                                        link.style.visibility = "visible"; // Reset visibility if candidate view was active
+                                });
+                        
+                                // 3. Reset view state
+                                document.body.classList.remove("candidate-view", "edit-mode", "opaque-mode");
+                        
+                                // 4. Update Candidate View button label
+                                const toggleBtn = document.getElementById(CERT_TRACKER_CONFIG.buttonIds.candidateView);
+                                if (toggleBtn) {
+                                        toggleBtn.textContent = CERT_TRACKER_CONFIG.labels.candidateOff;
+                                }
+                        
+                                alert("✅ Your cert selections have been cleared.");
+                                }
+                                });
+                                });
+                        </script>
+                        <!-- === END: Clear My Tracking Script === -->
       
-            toggleCandidateViewButton.textContent = showing ? "🏠 Exit Candidate View" : "🎯 Candidate View";
-            toggleEditModeButton.textContent = "✏️ Edit My Certs";
-      
-          // Update cert visibility based on mode
-            updateCertVisibility();
-          });
-      
-          // ✏️ Edit Mode Toggle (within Candidate View)
-          toggleEditModeButton.addEventListener("click", () => {
-          const editing = document.body.classList.toggle("edit-mode");
-          toggleEditModeButton.textContent = editing ? "✅ Done Editing" : "✏️ Edit My Certs";
-
-          if (editing) {
-          // Restore previous opaque mode state
-          const opaquePref = localStorage.getItem("opaqueMode") === "true";
-          if (opaquePref) {
-          document.body.classList.add("opaque-mode");
-          toggleOpacityModeButton.textContent = "💡 Full View";
-          } else {
-          document.body.classList.remove("opaque-mode");
-          toggleOpacityModeButton.textContent = "🌫 Opaque Mode";
-          }
-          } else {
-          document.body.classList.remove("opaque-mode");
-          localStorage.setItem("opaqueMode", "false"); // Clean up
-          }
-
-          updateCertVisibility();
-          });
-
-// 🌫 Opaque Mode Toggle
-toggleOpacityModeButton.addEventListener("click", () => {
-  const opaque = document.body.classList.toggle("opaque-mode");
-  toggleOpacityModeButton.textContent = opaque ? "💡 Full View" : "🌫 Opaque Mode";
-
-  // Save preference
-  localStorage.setItem("opaqueMode", opaque ? "true" : "false");
-});
-
-      
-          // 🔁 Visibility Logic
-          function updateCertVisibility() {
-            const inCandidateView = document.body.classList.contains("candidate-view");
-            const inEditMode = document.body.classList.contains("edit-mode");
-      
-            document.querySelectorAll(".certlink").forEach(link => {
-              const isAchieved = link.classList.contains("achieved");
-              const isPlanned = link.classList.contains("planned");
-      
-              if (!inCandidateView) {
-                // Default view: show all
-                link.style.visibility = "visible";
-              } else if (inEditMode) {
-                // Edit mode: show all for editing
-                link.style.visibility = "visible";
-              } else {
-                // Candidate view (no edit): show only achieved/planned
-                link.style.visibility = (isAchieved || isPlanned) ? "visible" : "hidden";
-              }
-            });
-          }
-        });
-</script>
-<!-- === END: Candidate View & Edit Mode Toggle Logic === -->
-      
-<!-- === BEGIN: Reset Tracking Script (added by @RealCyberJim) === -->
-        <script>
-          document.addEventListener("DOMContentLoaded", () => {
-                const resetButton = document.getElementById("resetCertTracking");
-      
-          resetButton.addEventListener("click", () => {
-            const confirmed = confirm("Are you sure you want to clear all cert tracking (achieved/planned)?");
-      
-            if (confirmed) {
-              // Clear localStorage
-              localStorage.removeItem("achievedCerts");
-              localStorage.removeItem("plannedCerts");
-      
-              // Remove classes from all certs
-              const links = document.querySelectorAll(".certlink");
-              links.forEach(link => {
-                link.classList.remove("achieved", "planned");
-                link.style.visibility = "visible"; // In case hidden by Candidate View
-              });
-      
-              // Remove candidate-view mode if active
-              document.body.classList.remove("candidate-view");
-      
-              // Reset Candidate View button label
-              const toggleButton = document.getElementById("toggleCandidateView");
-              if (toggleButton) {
-                toggleButton.textContent = "🎯 Candidate View";
-              }
-      
-              alert("✅ Cert progress has been reset.");
-            }
-          });
-        });
-      </script>
-<!-- === END: Reset Tracking Script === -->
+ 
       
 
 
